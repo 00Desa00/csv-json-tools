@@ -50,3 +50,10 @@ def test_cli_errors(tmp_path):
     bad = tmp_path / "bad.json"
     bad.write_text("{not json", encoding="utf-8")
     assert json2csv.main([str(bad)]) == 3
+
+
+def test_cli_rejects_multi_char_delimiter(tmp_path, capsys):
+    src = tmp_path / "in.json"
+    src.write_text(json.dumps([{"a": 1}]), encoding="utf-8")
+    assert json2csv.main([str(src), "-d", ";;"]) == 2
+    assert "delimiter must be a single character" in capsys.readouterr().err

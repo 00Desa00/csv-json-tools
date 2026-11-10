@@ -60,6 +60,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("-c", "--columns", help="comma-separated column order (default: auto)")
     p.add_argument("--encoding", default="utf-8")
     a = p.parse_args(argv)
+    if len(a.delimiter) != 1:
+        print("error: delimiter must be a single character", file=sys.stderr)
+        return 2
     try:
         if a.input == "-":
             data = json.load(sys.stdin)
